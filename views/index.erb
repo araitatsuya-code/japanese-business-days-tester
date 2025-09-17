@@ -1,0 +1,63 @@
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">営業日チェック</h3>
+            </div>
+            <div class="card-body">
+                <form action="/check" method="POST" id="dateForm" novalidate>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">日付を選択してください</label>
+                        <input type="date" 
+                               class="form-control form-control-lg" 
+                               id="date" 
+                               name="date" 
+                               required
+                               max="<%= Date.today.year + 10 %>-12-31"
+                               min="1900-01-01">
+                        <div class="form-text">
+                            日付を選択して、その日が営業日かどうかを確認できます<br>
+                            <small class="text-muted">対応範囲: 1900年〜<%= Date.today.year + 10 %>年</small>
+                        </div>
+                        <div class="invalid-feedback" id="dateError">
+                            有効な日付を選択してください
+                        </div>
+                    </div>
+                    
+                    <div class="row g-2">
+                        <div class="col-8">
+                            <button type="submit" class="btn btn-primary btn-lg w-100" id="submitBtn">
+                                <i class="bi bi-calendar-check"></i>
+                                営業日をチェック
+                            </button>
+                        </div>
+                        <div class="col-4">
+                            <button type="button" class="btn btn-outline-secondary btn-lg w-100" id="todayBtn">
+                                <i class="bi bi-calendar-today"></i>
+                                今日
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- Enhanced validation messages -->
+                <div class="mt-3">
+                    <div class="alert alert-info d-none" id="validationHelp">
+                        <h6><i class="bi bi-info-circle"></i> 入力のヒント:</h6>
+                        <ul class="mb-0 small">
+                            <li>カレンダーアイコンをクリックして日付を選択</li>
+                            <li>キーボードで直接入力も可能です（YYYY-MM-DD形式）</li>
+                            <li>今日の日付: <%= Date.today.strftime('%Y年%m月%d日') %></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4 text-center">
+            <small class="text-muted">
+                このツールは japanese_business_days gem を使用して日本の営業日を判定します
+            </small>
+        </div>
+    </div>
+</div>

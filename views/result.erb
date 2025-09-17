@@ -1,0 +1,125 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <% if @result[:error] %>
+            <!-- Enhanced Error Display -->
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        エラー
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <strong>エラーが発生しました:</strong><br>
+                        <%= @result[:error] %>
+                    </div>
+                    
+                    <!-- Error-specific help messages -->
+                    <% if @result[:error_type] == "validation" %>
+                        <div class="alert alert-info">
+                            <h6><i class="bi bi-info-circle"></i> 解決方法:</h6>
+                            <ul class="mb-0">
+                                <li>カレンダーアイコンをクリックして日付を選択してください</li>
+                                <li>手動で入力する場合は YYYY-MM-DD 形式で入力してください（例：2024-01-15）</li>
+                            </ul>
+                        </div>
+                    <% elsif @result[:error_type] == "format" %>
+                        <div class="alert alert-info">
+                            <h6><i class="bi bi-info-circle"></i> 解決方法:</h6>
+                            <ul class="mb-0">
+                                <li>正しい日付形式で入力してください（YYYY-MM-DD）</li>
+                                <li>存在しない日付（例：2024-02-30）は入力できません</li>
+                                <li>カレンダーから選択することをお勧めします</li>
+                            </ul>
+                        </div>
+                    <% elsif @result[:gem_error] %>
+                        <div class="alert alert-warning">
+                            <h6><i class="bi bi-gear"></i> システム情報:</h6>
+                            <p class="mb-0">
+                                営業日判定機能が一時的に利用できません。<br>
+                                管理者にお問い合わせください。
+                            </p>
+                        </div>
+                    <% elsif @result[:error_type] == "system" %>
+                        <div class="alert alert-warning">
+                            <h6><i class="bi bi-gear"></i> システムエラー:</h6>
+                            <p class="mb-0">
+                                システムで問題が発生しました。<br>
+                                問題が続く場合は管理者にお問い合わせください。
+                            </p>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        <% else %>
+            <!-- Success Result Display -->
+            <div class="card shadow <%= @result[:is_business_day] ? 'border-success' : 'border-warning' %>">
+                <div class="card-header <%= @result[:is_business_day] ? 'bg-success' : 'bg-warning' %> text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="bi bi-calendar-check"></i>
+                        判定結果
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <!-- Input Date Display -->
+                    <div class="mb-4">
+                        <h5 class="text-muted">チェックした日付</h5>
+                        <p class="h4 text-primary">
+                            <%= @result[:date].strftime('%Y年%m月%d日 (%A)') %>
+                        </p>
+                    </div>
+                    
+                    <!-- Business Day Status -->
+                    <div class="mb-4">
+                        <h5 class="text-muted">営業日判定</h5>
+                        <% if @result[:is_business_day] %>
+                            <div class="alert alert-success d-flex align-items-center">
+                                <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                                <div>
+                                    <strong class="fs-5">営業日です</strong><br>
+                                    <span class="text-muted">この日は通常の営業日です</span>
+                                </div>
+                            </div>
+                        <% else %>
+                            <div class="alert alert-warning d-flex align-items-center">
+                                <i class="bi bi-x-circle-fill me-2 fs-4"></i>
+                                <div>
+                                    <strong class="fs-5">営業日ではありません</strong><br>
+                                    <span class="text-muted">理由: <%= @result[:reason] %></span>
+                                </div>
+                            </div>
+                        <% end %>
+                    </div>
+                    
+                    <!-- Additional Information -->
+                    <div class="mb-4">
+                        <h6 class="text-muted">詳細情報</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>曜日:</strong> <%= @result[:date].strftime('%A') %></li>
+                            <li><strong>年:</strong> <%= @result[:date].year %>年</li>
+                            <li><strong>月:</strong> <%= @result[:date].month %>月</li>
+                            <li><strong>日:</strong> <%= @result[:date].day %>日</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+        
+        <!-- Navigation Back to Main Form -->
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-primary btn-lg">
+                <i class="bi bi-arrow-left"></i>
+                別の日付をチェック
+            </a>
+        </div>
+        
+        <!-- Additional Information -->
+        <div class="mt-4 text-center">
+            <small class="text-muted">
+                このツールは japanese_business_days gem を使用して日本の営業日を判定します<br>
+                土日祝日は営業日ではありません
+            </small>
+        </div>
+    </div>
+</div>
