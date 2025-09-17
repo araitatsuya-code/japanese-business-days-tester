@@ -2,6 +2,8 @@
 
 日本の営業日（平日・祝日を考慮）を簡単にチェックできるWebアプリケーションです。
 
+<img width="785" height="672" alt="image" src="https://github.com/user-attachments/assets/4e8c01d6-1a5d-4d4c-bc6e-fb1bc9c891b0" />
+
 ## 機能
 
 - 📅 日付を選択して営業日かどうかを判定
